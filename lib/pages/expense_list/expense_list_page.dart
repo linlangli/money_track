@@ -62,7 +62,7 @@ class ExpenseListPage extends StatelessWidget {
                 onRefresh: () => controller.loadExpenses(forceRefresh: true),
                 color: AppColors.primary,
                 child: ListView.builder(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.only(bottom: 16, left: 8, right: 8),
                   itemCount: controller.dailyExpenses.length,
                   itemBuilder: (context, index) {
                     final dailyExpense = controller.dailyExpenses[index];
@@ -95,17 +95,12 @@ class ExpenseListPage extends StatelessWidget {
             children: [
               Text(
                 dailyExpense.formattedDate,
-                style: context.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: context.textTheme.bodySmall,
               ),
               const Spacer(),
               Text(
                 dailyExpense.formattedTotalAmount,
-                style: context.textTheme.titleMedium?.copyWith(
-                  color: AppColors.pink,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: context.textTheme.bodySmall,
               ),
             ],
           ),
@@ -122,17 +117,16 @@ class ExpenseListPage extends StatelessWidget {
   Widget _buildExpanseItem() {
     return Column(
       children: [
-        Divider(height: 1, color: AppColors.divider),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Row(
             children: [
               SvgPicture.asset(
-                'assets/icons/icon_expense_food.svg',
-                width: 32,
-                height: 32,
+                'assets/icons/icon_expend_type_ catering.svg',
+                width: 16,
+                height: 16,
               ),
-              SizedBox(width: 12),
+              SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,17 +134,9 @@ class ExpenseListPage extends StatelessWidget {
                     Text(
                       '午餐',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 12,
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      '12:30 PM',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.textSecondary,
                       ),
                     ),
                   ],
@@ -159,8 +145,8 @@ class ExpenseListPage extends StatelessWidget {
               Text(
                 '-45.00',
                 style: TextStyle(
-                  fontSize: 16,
-                  color: AppColors.pink,
+                  fontSize: 12,
+                  color: AppColors.black  ,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -172,77 +158,96 @@ class ExpenseListPage extends StatelessWidget {
   }
 
   Widget _buildSummaryInfo(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(width: 28),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '2015',
-              style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
-            ),
-            SizedBox(height: 4),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  '12',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '2025年',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textSecondary.withValues(alpha: 0.6),
                 ),
-                SizedBox(width: 4),
-                IgnorePointer(
-                  child: SvgPicture.asset(
-                    'assets/icons/icon_date_select.svg',
-                    width: 14,
-                    height: 14,
+              ),
+              SizedBox(height: 4),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '12月',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
+                  SizedBox(width: 2),
+                  IgnorePointer(
+                    child: SvgPicture.asset(
+                      'assets/icons/icon_date_select.svg',
+                      width: 14,
+                      height: 14,
+                    ),
+                  ),
+                ],
+              ).button(onTap: () async {
+                await CustomDatePickerDialog.show(context);
+              }),
+            ],
+          ),
+          Spacer(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                '支出',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textSecondary.withValues(alpha: 0.6),
                 ),
-              ],
-            ).button(onTap: () async {
-              await CustomDatePickerDialog.show(context);
-            }),
-          ],
-        ),
-        Spacer(flex: 1),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '支出',
-              style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
-            ),
-            SizedBox(height: 4),
-            Text(
-              '120',
-              style: TextStyle(fontSize: 14, color: AppColors.textPrimary),
-            ),
-          ],
-        ),
-        Spacer(flex: 1),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '结余',
-              style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
-            ),
-            SizedBox(height: 4),
-            Text(
-              '32',
-              style: TextStyle(fontSize: 14, color: AppColors.textPrimary),
-            ),
-          ],
-        ),
-        SizedBox(width: 28),
-      ],
+              ),
+              SizedBox(height: 4),
+              Text(
+                '120.0',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+          Spacer(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                '结余',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textSecondary.withValues(alpha: 0.6),
+                ),
+              ),
+              SizedBox(height: 4),
+              Text(
+                '120.0',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
