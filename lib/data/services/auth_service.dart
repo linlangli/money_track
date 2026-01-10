@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 /// Firebase 认证服务类
 /// 处理用户注册、登录、登出等认证功能
@@ -109,8 +110,11 @@ class AuthService {
   /// 登出当前用户
   Future<void> signOut() async {
     try {
+      debugPrint('👋 [Auth] 用户登出...');
       await _auth.signOut();
+      debugPrint('✅ [Auth] 登出成功');
     } catch (e) {
+      debugPrint('❌ [Auth] 登出失败: $e');
       throw Exception('登出失败: $e');
     }
   }

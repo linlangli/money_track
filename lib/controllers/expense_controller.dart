@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../data/models/expense_model.dart';
 import '../../data/repositories/expense_repository.dart';
 import '../../utils/debug_config.dart';
+import '../../utils/analytics_helper.dart';
 
 class ExpenseController extends GetxController {
   final ExpenseRepository _repository = ExpenseRepository();
@@ -146,6 +147,11 @@ class ExpenseController extends GetxController {
       isLoading.value = true;
       error.value = '';
 
+      // 发送刷新埋点
+      if (forceRefresh) {
+        await AnalyticsHelper.logRefresh('expense_list');
+      }
+
       final loadedExpenses = await _repository.getExpenses(
         forceRefresh: forceRefresh,
       );
@@ -169,6 +175,14 @@ class ExpenseController extends GetxController {
       await _repository.updateBalance(balance.value);
 
       _applyFilters();
+
+      // 发送添加消费埋点
+      await AnalyticsHelper.logAddExpense(
+        amount: expense.amount,
+        category: expense.type.id,
+        hasNote: expense.description.isNotEmpty,
+      );
+
       Get.back(); // Close add expense dialog
       Get.snackbar(
         '成功',
@@ -177,6 +191,12 @@ class ExpenseController extends GetxController {
         duration: const Duration(seconds: 2),
       );
     } catch (e) {
+      // 发送错误埋点
+      await AnalyticsHelper.logError(
+        errorType: 'add_expense_failed',
+        errorMessage: e.toString(),
+      );
+
       Get.snackbar(
         '错误',
         '添加失败: $e',
@@ -198,6 +218,13 @@ class ExpenseController extends GetxController {
       await _repository.updateBalance(balance.value);
 
       _applyFilters();
+
+      // 发送删除消费埋点
+      await AnalyticsHelper.logDeleteExpense(
+        amount: expense.amount,
+        category: expense.type.id,
+      );
+
       Get.snackbar(
         '成功',
         '消费已删除',
@@ -205,6 +232,12 @@ class ExpenseController extends GetxController {
         duration: const Duration(seconds: 2),
       );
     } catch (e) {
+      // 发送错误埋点
+      await AnalyticsHelper.logError(
+        errorType: 'delete_expense_failed',
+        errorMessage: e.toString(),
+      );
+
       Get.snackbar(
         '错误',
         '删除失败: $e',
@@ -249,6 +282,12 @@ class ExpenseController extends GetxController {
   void setFilterType(ExpenseType? type) {
     selectedType.value = type;
     _applyFilters();
+
+    // 发送筛选埋点
+    AnalyticsHelper.logFilterExpenses(
+      category: type?.id,
+      dateRange: startDate.value != null ? 'custom' : null,
+    );
   }
 
   // Set date range filter
@@ -256,6 +295,12 @@ class ExpenseController extends GetxController {
     startDate.value = start;
     endDate.value = end;
     _applyFilters();
+
+    // 发送筛选埋点
+    AnalyticsHelper.logFilterExpenses(
+      category: selectedType.value?.id,
+      dateRange: start != null ? 'custom' : null,
+    );
   }
 
   // Reset filters

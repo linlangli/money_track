@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import '../models/expense_model.dart';
 
 /// Firebase服务类 - 处理与Firebase Firestore的数据交互
@@ -29,17 +30,26 @@ class FirebaseService {
   /// 返回按日期降序排列的消费记录列表
   Future<List<Expense>> fetchExpenses() async {
     try {
+      debugPrint('📥 [Firestore] 获取所有消费记录...');
+      debugPrint('   - 用户ID: $_userId');
+
       final querySnapshot = await _userExpensesRef
           .orderBy('date', descending: true)
           .get();
 
-      return querySnapshot.docs
+      final expenses = querySnapshot.docs
           .map((doc) => Expense.fromJson({
                 ...doc.data(),
                 'id': doc.id,
               }))
           .toList();
+
+      debugPrint('✅ [Firestore] 获取消费记录成功');
+      debugPrint('   - 记录数量: ${expenses.length}');
+
+      return expenses;
     } catch (e) {
+      debugPrint('❌ [Firestore] 获取消费记录失败: $e');
       throw Exception('获取消费记录失败: $e');
     }
   }
@@ -185,8 +195,16 @@ class FirebaseService {
   /// [expense] 包含更新后数据的消费记录对象
   Future<void> updateExpense(Expense expense) async {
     try {
+      debugPrint('✏️ [Firestore] 更新消费记录...');
+      debugPrint('   - 文档ID: ${expense.id}');
+      debugPrint('   - 类型: ${expense.type}');
+      debugPrint('   - 金额: ${expense.amount}');
+
       await _userExpensesRef.doc(expense.id).update(expense.toJson());
+
+      debugPrint('✅ [Firestore] 消费记录更新成功');
     } catch (e) {
+      debugPrint('❌ [Firestore] 更新消费记录失败: $e');
       throw Exception('更新消费记录失败: $e');
     }
   }
@@ -206,8 +224,14 @@ class FirebaseService {
   /// [id] 消费记录ID
   Future<void> deleteExpense(String id) async {
     try {
+      debugPrint('🗑️ [Firestore] 删除消费记录...');
+      debugPrint('   - 文档ID: $id');
+
       await _userExpensesRef.doc(id).delete();
+
+      debugPrint('✅ [Firestore] 消费记录删除成功');
     } catch (e) {
+      debugPrint('❌ [Firestore] 删除消费记录失败: $e');
       throw Exception('删除消费记录失败: $e');
     }
   }
