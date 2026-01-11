@@ -232,10 +232,66 @@ class FirebaseDebugHelper {
 
     } catch (e, stackTrace) {
       debugPrint('❌ [Auth] 匿名登录失败: $e');
+      debugPrint('❌ [Auth] 错误类型: ${e.runtimeType}');
       debugPrint('❌ [Auth] 堆栈跟踪: $stackTrace');
 
-      if (e.toString().contains('operation-not-allowed')) {
-        debugPrint('💡 [Auth] 提示: 匿名登录未启用，请在 Firebase Console 中启用');
+      // 分析错误类型并提供解决方案
+      final errorString = e.toString();
+
+      if (errorString.contains('operation-not-allowed') ||
+          errorString.contains('OPERATION_NOT_ALLOWED')) {
+        debugPrint('');
+        debugPrint('🔒 [Auth] 匿名登录未启用！');
+        debugPrint('💡 [Auth] 解决方案:');
+        debugPrint('   1. 打开 Firebase Console:');
+        debugPrint('      https://console.firebase.google.com/project/moneytrack-90239/authentication/providers');
+        debugPrint('   2. 点击 "Authentication" → "Sign-in method"');
+        debugPrint('   3. 在 "匿名" 一栏中点击启用');
+        debugPrint('   4. 保存设置');
+        debugPrint('   5. 重新运行应用');
+        debugPrint('');
+      } else if (errorString.contains('internal-error') ||
+                 errorString.contains('INTERNAL_ERROR')) {
+        debugPrint('');
+        debugPrint('⚠️ [Auth] Firebase 内部错误');
+        debugPrint('💡 [Auth] 可能原因:');
+        debugPrint('   1. 匿名登录功能未启用（最常见）');
+        debugPrint('   2. Firebase 项目配置不正确');
+        debugPrint('   3. 网络连接问题');
+        debugPrint('   4. Firebase Auth 服务暂时不可用');
+        debugPrint('');
+        debugPrint('🔧 [Auth] 解决步骤:');
+        debugPrint('   步骤 1: 检查并启用匿名登录');
+        debugPrint('   ----------------------------------------');
+        debugPrint('   访问: https://console.firebase.google.com/project/moneytrack-90239/authentication/providers');
+        debugPrint('   在 "Sign-in method" 标签中启用 "匿名" 登录方式');
+        debugPrint('');
+        debugPrint('   步骤 2: 检查 Firebase 配置');
+        debugPrint('   ----------------------------------------');
+        debugPrint('   确认 firebase_options.dart 中的配置正确');
+        debugPrint('   项目 ID: moneytrack-90239');
+        debugPrint('');
+        debugPrint('   步骤 3: 检查网络连接');
+        debugPrint('   ----------------------------------------');
+        debugPrint('   确认设备可以访问 Firebase 服务');
+        debugPrint('');
+      } else if (errorString.contains('network-request-failed') ||
+                 errorString.contains('NETWORK_REQUEST_FAILED')) {
+        debugPrint('');
+        debugPrint('🌐 [Auth] 网络请求失败');
+        debugPrint('💡 [Auth] 解决方案:');
+        debugPrint('   1. 检查设备网络连接');
+        debugPrint('   2. 确认可以访问 Firebase 服务');
+        debugPrint('   3. 检查防火墙设置');
+        debugPrint('');
+      } else {
+        debugPrint('');
+        debugPrint('❓ [Auth] 未知错误');
+        debugPrint('💡 [Auth] 建议:');
+        debugPrint('   1. 检查 Firebase Console 中的 Authentication 设置');
+        debugPrint('   2. 确认项目配置正确');
+        debugPrint('   3. 查看完整错误信息并搜索解决方案');
+        debugPrint('');
       }
     }
   }

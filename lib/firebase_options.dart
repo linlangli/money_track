@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '445095481778',
     projectId: 'moneytrack-90239',
     storageBucket: 'moneytrack-90239.firebasestorage.app',
-    iosBundleId: 'com.example.moneyTrack',
+    iosBundleId: 'com.linlangli.moneytrack',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '445095481778',
     projectId: 'moneytrack-90239',
     storageBucket: 'moneytrack-90239.firebasestorage.app',
-    iosBundleId: 'com.example.moneyTrack',
+    iosBundleId: 'com.linlangli.moneytrack',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

@@ -170,7 +170,7 @@ class ExpenseListPage extends StatelessWidget {
               Text(
                 '2025年',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: context.textTheme.bodyMedium?.fontSize,
                   color: AppColors.textSecondary.withValues(alpha: 0.6),
                 ),
               ),
@@ -180,11 +180,7 @@ class ExpenseListPage extends StatelessWidget {
                 children: [
                   Text(
                     '12月',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.textPrimary,
-                    ),
+                    style: context.textTheme.bodyMedium,
                   ),
                   SizedBox(width: 2),
                   IgnorePointer(
@@ -208,18 +204,14 @@ class ExpenseListPage extends StatelessWidget {
               Text(
                 '支出',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: context.textTheme.bodyMedium?.fontSize,
                   color: AppColors.textSecondary.withValues(alpha: 0.6),
                 ),
               ),
               SizedBox(height: 4),
               Text(
                 '120.0',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.textPrimary,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: context.textTheme.bodyMedium,
               ),
             ],
           ),
@@ -231,18 +223,14 @@ class ExpenseListPage extends StatelessWidget {
               Text(
                 '结余',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: context.textTheme.bodyMedium?.fontSize,
                   color: AppColors.textSecondary.withValues(alpha: 0.6),
                 ),
               ),
               SizedBox(height: 4),
               Text(
                 '120.0',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.textPrimary,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: context.textTheme.bodyMedium,
               ),
             ],
           ),
